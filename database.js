@@ -6,14 +6,4 @@ const sequelize = new Sequelize('assignment', 'root', '', {
   dialect: 'mysql',
 });
 
-
-// sequelize
-//   .authenticate()
-//   .then(() => {
-//     console.log('Connection established successfully');
-//   })
-//   .catch((err) => {
-//     console.error('Unable to connect to the database:', err);
-//   });
-
 module.exports = sequelize; 
