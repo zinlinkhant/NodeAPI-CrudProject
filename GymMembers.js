@@ -16,7 +16,7 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
   registeredDate: {
-    type: DataTypes.DATEONLY,
+    type: DataTypes.DATE,
     allowNull:false
   },
   numberOfDays:{

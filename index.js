@@ -15,7 +15,7 @@ app.listen(port, () => {
 const userSchema = zod.object({
     username: zod.string().min(3,"Username is required"),
     email: zod.string().email(),
-    registeredData: zod.date().optional(),
+    registeredDate: zod.string().date(),
     numberOfDays: zod.number().min(1,"Number of days must be at least 1")
 })
 const Member = (req,res,next) => {
