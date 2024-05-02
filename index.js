@@ -18,9 +18,24 @@ const userSchema = zod.object({
     registeredDate: zod.string().date(),
     numberOfDays: zod.number().min(1,"Number of days must be at least 1")
 })
+const UpdateUserSchema = zod.object({
+    username: zod.string().min(3).optional(),
+    email: zod.string().email().optional(),
+    registeredDate: zod.string().date().optional(),
+    numberOfDays: zod.number().min(1,"Number of days must be at least 1").optional()
+})
+
 const Member = (req,res,next) => {
     try {
         userSchema.parse(req.body);
+        next()
+    } catch (error) {
+        res.status(400).json({errors: error.errors})
+    }
+}
+const UpdateMember = (req,res,next) => {
+    try {
+        UpdateUserSchema.parse(req.body);
         next()
     } catch (error) {
         res.status(400).json({errors: error.errors})
@@ -54,7 +69,7 @@ app.post("/members",Member,(req,res)=>{
     res.status(500).json({ error: 'Error creating User' }); 
   }
 })
-app.put("/members/:id",Member,async (req,res)=>{
+app.patch("/members/:id",UpdateMember,async (req,res)=>{
     try {
         const userId = req.params.id;
         const updateData = req.body;
@@ -62,10 +77,18 @@ app.put("/members/:id",Member,async (req,res)=>{
         if(!user){
             return res.status(404).json({ error: 'User not found' });
         }
-        user.username = updateData.username;
-        user.email = updateData.email;
-        user.registeredData = updateData.registeredData;
-        user.numberOfDays = updateData.numberOfDays;
+        if(updateData.username){
+            user.username = updateData.username;
+        }
+        if(updateData.email){
+            user.email = updateData.email;
+        }
+        if(updateData.registeredData){
+            user.registeredData = updateData.registeredData;
+        }
+        if(updateData.numberOfDays){
+            user.numberOfDays = updateData.numberOfDays;
+        }
         await user.save()
          res.status(200).json({ message: 'User updated successfully' });
 
